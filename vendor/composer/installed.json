@@ -1,0 +1,50 @@
+{
+    "packages": [
+        {
+            "name": "web2sms/sms",
+            "version": "v1.0.2.1",
+            "version_normalized": "1.0.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/web2sms/composer.git",
+                "reference": "64f3696d66168a3b7183773f4b6d293bbcbfca9a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/web2sms/composer/zipball/64f3696d66168a3b7183773f4b6d293bbcbfca9a",
+                "reference": "64f3696d66168a3b7183773f4b6d293bbcbfca9a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "php": ">=5.5"
+            },
+            "time": "2021-12-22T13:36:06+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Web2sms\\Sms\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "WEB2SMS SRL",
+                    "email": "contact@web2sms.ro"
+                }
+            ],
+            "description": "Set of library provides easy implementing to send SMS from any applications written in the PHP language via WEB2SMS services",
+            "support": {
+                "issues": "https://github.com/web2sms/composer/issues",
+                "source": "https://github.com/web2sms/composer/tree/v1.0.2.1"
+            },
+            "install-path": "../web2sms/sms"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}
