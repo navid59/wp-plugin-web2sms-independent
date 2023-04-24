@@ -24,7 +24,7 @@ class WC_Settings_Web2sms {
      * @return array $settings_tabs Array of WooCommerce setting tabs & their labels, including the Subscription tab.
      */
     public static function add_settings_tab( $settings_tabs ) {
-        $settings_tabs['settings_tab_web2sms'] = 'SMS Settings';
+        $settings_tabs['settings_tab_web2sms'] = 'WEB2SMS Settings';
         return $settings_tabs;
     }
 

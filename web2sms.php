@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: WEB 2 SMS
+Plugin Name: WEB2SMS for WooCommerce
 Plugin URI: https://www.web2sms.ro
 Description: send SMS on order status change & abandoned carts
 Author: Web2sms
@@ -20,6 +20,15 @@ function web2sms_init() {
 	 * Thicbox for Popup
 	 */
 	add_thickbox();
+
+	// Add custom action links
+	add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'netopia_action_links' );
+	function netopia_action_links( $links ) {
+		$plugin_links = array(
+			'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=settings_tab_web2sms' ) . '">' . __( 'Settings', 'netopiapayments' ) . '</a>',
+		);
+		return array_merge( $plugin_links, $links );
+	}
 
 	wp_enqueue_script( 'web2smsjs', plugin_dir_url( __FILE__ ) . 'js/web2sms.js',array('jquery'),'1.0.2' ,true);
 	wp_enqueue_script( 'web2smsjstoastr', plugin_dir_url( __FILE__ ) . 'js/toastr.min.js',array(),'1.0.1' ,true);
