@@ -449,7 +449,7 @@ function sms_content_calculation() {
 	global $wpdb;
     $strFind = array("%ordId%", "%name%", "%lastname%", "%email%");
     $strReplace = array("1234", "ClientName", "ClientLastname", "client@email.com");
-    $strContent = str_replace($strFind, $strReplace, $_POST['str']);
+    $strContent = str_replace($strFind, $strReplace, sanitize_text_field($_POST['str']));
     $_SESSION['smsStrContent']   = $strContent;
 	wp_die(); // this is required to terminate immediately and return a proper response
 }

@@ -127,12 +127,7 @@ function smsCalculation(str, isStandard) {
             smsNr = Math.ceil(str.length / maxSplitSizeNoneStandard);
         }
     }
-
-    console.log(str.length);
-    console.log(str);
-    console.log(isStandard);
-    console.log(smsNr);
-    
+   
     var data = {
         'action': 'sms_content_calculation',
         'str': str
