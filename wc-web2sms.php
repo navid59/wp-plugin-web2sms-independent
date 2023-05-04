@@ -388,18 +388,18 @@ function woo_order_status_change_custom($order_id) {
         $order->get_billing_email()
     );
     
-    $smsContent     = str_replace($strFind, $strReplace, $smsContentThem);
+    $smsContent     = str_replace($strFind, $strReplace, sanitize_text_field($smsContentThem));
 
     /**
      *  Send SMS
      * */ 
     if($web2sms->isActive($smsOrderStatus)) {
-        sendSMS($smsOrderId, $smsOrderStatus, $smsReciverName, $smsCellPhoneNr, $smsContent);
+        sendSMS($smsCellPhoneNr, $smsContent);
     }
 }
 
 
-function sendSMS($smsOrderId, $smsOrderStatus, $smsReciverName, $smsCellPhoneNr, $smsContent){
+function sendSMS($smsCellPhoneNr, $smsContent){
     
     $web2sms = new WC_Settings_Web2sms();
     
@@ -529,8 +529,6 @@ function web2smsReminder() {
         $userInfo = json_decode($abandonedCart->userInfo);
         if(!empty($userInfo->billing_phone)) {
             if(isValidPhoneNumber($userInfo->billing_phone)) {
-                // $cartInfo = json_decode($abandonedCart->cartInfo);
-                
                 /**
                  * Regenerate / Customize SMS Content
                  */
@@ -541,14 +539,14 @@ function web2smsReminder() {
                     $userInfo->billing_email
                 );
                 
-                $smsContent = str_replace($strFind, $strReplace, $reminderContent);
+                $smsContent = str_replace($strFind, $strReplace, sanitize_text_field($reminderContent));
                 $reminderPhoneNr = $userInfo->billing_phone;
 
                 /**
                  *  Send SMS as reminder
                  **/ 
                 if($web2sms->isEnable()) {
-                  $sendSmsResult = sendSMS(null, null, null, $reminderPhoneNr, $smsContent);
+                  $sendSmsResult = sendSMS($reminderPhoneNr, $smsContent);
                 }
 
 
@@ -651,7 +649,6 @@ function web2sms_store_abandoned_cart() {
                         date( 'Y-m-d h:i:s', current_time( $currentTime + (2 * 24 * 60 * 60 ) ))                        
                     )
                 );
-                // $abandoned_cart_id = $wpdb->insert_id; // The abandoned cart id
             }
         } else {
             $updatedCartInfo         = array();
