@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap 5 Example</title>
+  <title>WEB2SMS Documentian</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid p-5 bg-primary text-white text-center">
-        <img src="https://www.web2sms.ro/assets/themes/public/images/front/logo.png">
-        <h1>Web2sms Wordpress documentație!</h1>
+        <img src="../img/web2sms_logo.svg" width="152" height="60">
+        <h1>Web2sms documentație!</h1>
         <p>plugin-ul pentru platforma utilizata in WcooCommerce</p> 
     </div>
     

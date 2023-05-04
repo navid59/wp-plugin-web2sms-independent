@@ -2,10 +2,10 @@
 
 /*
 Plugin Name: WEB2SMS for WooCommerce
-Plugin URI: https://www.web2sms.ro
 Description: send SMS on order status change & abandoned carts
-Author: Web2sms
-Version: 1.0
+Version: 1.0.0
+Author: Web2sms development team
+Author URI: https://www.web2sms.ro
 License: GPLv2
 */
 

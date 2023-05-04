@@ -1,4 +1,4 @@
-<div align="center"><a href="https://www.web2sms.ro"><img alt="Parsedown" src="https://www.web2sms.ro/assets/themes/public/images/front/logo.png" /></a></div>
+<div align="center"><a href="https://www.web2sms.ro"><img alt="Parsedown" src="web2sms_logo.svg" width="152" height="60" /></a></div>
 
 # WEB2SMS SRL
 ### WEB2SMS Composer
