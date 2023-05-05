@@ -1,3 +1,6 @@
+/*
+ * versions 1.0.0
+ * */
 jQuery(document).ready(function(){
     jQuery("#btn_pending").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_pending_text').val();
