@@ -2,6 +2,12 @@
  * versions 1.0.0
  * */
 jQuery(document).ready(function(){
+
+    /**
+     * get plugin dir from PHP and use it in JS
+     */
+     var web2smsPluginUrl = web2sms_data.plugin_url;
+        
     jQuery("#btn_pending").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_pending_text').val();
         if(isEmpty(pendingStr)) {
@@ -99,7 +105,7 @@ jQuery(document).ready(function(){
     });
 
     jQuery("#show_documention").click(function(){
-        web2smsDocumention();
+        web2smsDocumention(web2smsPluginUrl);
     });
 });
 
@@ -173,6 +179,6 @@ function isEmpty(val){
     return (val === undefined || val == null || val.length <= 0) ? true : false;
 }
 
-function web2smsDocumention() {
-    tb_show("Documention", "../wp-content/plugins/web2sms/src/web2smsDocumention.php?TB_iframe=true&width=700&height=770");
+function web2smsDocumention(web2smsPluginUrl) {
+    tb_show("Documention", "../"+web2smsPluginUrl+"src/web2smsDocumention.php?TB_iframe=true&width=700&height=770");
 }

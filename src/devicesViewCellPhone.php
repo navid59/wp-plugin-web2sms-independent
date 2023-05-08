@@ -1,6 +1,4 @@
 <?php session_start();?>
-<!-- <link rel="stylesheet" href="../css/web2sms.css"> -->
-
 <style>
 /*
 * versions 1.0.0
