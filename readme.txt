@@ -1,10 +1,10 @@
-=== WEB2SMS for WooCommerce ===
+=== WEB2SMS ===
 Contributors: NETOPIA
 Tags: WEB2SMS, NETOPIA
-Requires at least: 5.5
-Tested up to: WordPress 6.2 + WooCommerce 7.5.0 + PHP 8.0
+Requires at least: 6.0
+Tested up to: WordPress 6.2
 Stable tag: 1.0.0
-Requires PHP: 7.0
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 

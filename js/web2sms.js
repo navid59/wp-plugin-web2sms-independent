@@ -17,7 +17,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
     });
 
     jQuery("#btn_onhold").click(function(){
@@ -29,7 +29,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
     });
     
     jQuery("#btn_failed").click(function(){
@@ -41,7 +41,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
     });
     
     jQuery("#btn_processing").click(function(){
@@ -53,7 +53,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
     });
     
     jQuery("#btn_cancelled").click(function(){
@@ -65,7 +65,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
     });
     
     jQuery("#btn_completed").click(function(){
@@ -77,7 +77,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
     });
     
     jQuery("#btn_refunded").click(function(){
@@ -89,7 +89,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
     });
     
     jQuery("#btn_reminder").click(function(){
@@ -101,7 +101,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
     });
 
     jQuery("#show_documention").click(function(){
@@ -112,7 +112,7 @@ jQuery(document).ready(function(){
 /**
  * Calculate Nr of SMS
  */
-function smsCalculation(str, isStandard) {
+function smsCalculation(str, isStandard, web2smsPluginUrl) {
     var maxSizeStandard          = 160; // Max Character in standard            | (140*8)/7
     var maxSizeNoneStandard      = 70;  // Max Character in none standard       | (140*8)/16
     var maxSpilitSizeStandard    = 153; // Max Character in split Standard      | ((140-6)*8)/7
@@ -143,7 +143,7 @@ function smsCalculation(str, isStandard) {
     };
     // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
     jQuery.post(ajaxurl, data, function(response) {
-        tb_show("Mobile view", "../wp-content/plugins/web2sms/src/devicesViewCellPhone.php?TB_iframe=true&width=400&height=770");
+        tb_show("Mobile view", "../"+web2smsPluginUrl+"src/devicesViewCellPhone.php?TB_iframe=true&width=400&height=770");
     });
 
     var smsLengthNote = "";
