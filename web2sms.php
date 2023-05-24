@@ -39,14 +39,14 @@ function web2sms_enqueue_scripts() {
 	wp_enqueue_script( 'web2sms-toastr', plugin_dir_url( __FILE__ ) . 'js/toastr.min.js',array(),'2.1.3' ,true);
     wp_enqueue_script( 'web2sms-script', plugins_url( 'js/web2sms.js', __FILE__ ), array(), '1.0.0', true );
     wp_localize_script( 'web2sms-script', 'web2sms_data', array(
-        'plugin_url' => getAbsoulutFilePath(),
+        'plugin_url' => web2sms_getAbsoulutFilePath(),
     ) );
 	wp_enqueue_style( 'web2sms-css', plugin_dir_url( __FILE__ ) . 'css/web2sms.css',array(),'1.0.0');
 	wp_enqueue_style( 'web2sms-toastr-css', plugin_dir_url( __FILE__ ) . 'css/toastr.min.css',array(),'2.1.3');
 }
 add_action( 'admin_enqueue_scripts', 'web2sms_enqueue_scripts' );
 
-function getAbsoulutFilePath() {
+function web2sms_getAbsoulutFilePath() {
 	// Get the absolute path to the plugin directory
 	$plugin_dir_path = plugin_dir_path( __FILE__ );
 

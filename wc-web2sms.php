@@ -10,10 +10,10 @@ class WC_Settings_Web2sms {
      * Bootstraps the class and hooks required actions & filters.
      *
      */
-    public static function init() {
-        add_filter( 'woocommerce_settings_tabs_array', __CLASS__ . '::add_settings_tab', 50 );
-        add_action( 'woocommerce_settings_tabs_settings_tab_web2sms', __CLASS__ . '::settings_tab' );
-        add_action( 'woocommerce_update_options_settings_tab_web2sms', __CLASS__ . '::update_settings' );
+    public static function web2sms_initialization() {
+        add_filter( 'woocommerce_settings_tabs_array', __CLASS__ . '::web2sms_add_settings_tab', 50 );
+        add_action( 'woocommerce_settings_tabs_settings_tab_web2sms', __CLASS__ . '::web2sms_settings_tab' );
+        add_action( 'woocommerce_update_options_settings_tab_web2sms', __CLASS__ . '::web2sms_update_settings' );
     }
     
     
@@ -23,7 +23,7 @@ class WC_Settings_Web2sms {
      * @param array $settings_tabs Array of WooCommerce setting tabs & their labels, excluding the Subscription tab.
      * @return array $settings_tabs Array of WooCommerce setting tabs & their labels, including the Subscription tab.
      */
-    public static function add_settings_tab( $settings_tabs ) {
+    public static function web2sms_add_settings_tab( $settings_tabs ) {
         $settings_tabs['settings_tab_web2sms'] = 'WEB2SMS Settings';
         return $settings_tabs;
     }
@@ -33,10 +33,10 @@ class WC_Settings_Web2sms {
      * Uses the WooCommerce admin fields API to output settings via the @see woocommerce_admin_fields() function.
      *
      * @uses woocommerce_admin_fields()
-     * @uses self::get_settings()
+     * @uses self::web2sms_get_settings()
      */
-    public static function settings_tab() {
-        woocommerce_admin_fields( self::get_settings() );
+    public static function web2sms_settings_tab() {
+        woocommerce_admin_fields( self::web2sms_get_settings() );
     }
 
 
@@ -44,10 +44,10 @@ class WC_Settings_Web2sms {
      * Uses the WooCommerce options API to save settings via the @see woocommerce_update_options() function.
      *
      * @uses woocommerce_update_options()
-     * @uses self::get_settings()
+     * @uses self::web2sms_get_settings()
      */
-    public static function update_settings() {
-        woocommerce_update_options( self::get_settings() );
+    public static function web2sms_update_settings() {
+        woocommerce_update_options( self::web2sms_get_settings() );
     }
 
 
@@ -56,7 +56,7 @@ class WC_Settings_Web2sms {
      *
      * @return array Array of settings for @see woocommerce_admin_fields() function.
      */
-    public static function get_settings() {
+    public static function web2sms_get_settings() {
         $settings = array(
             'section_title' => array(
                     'name'     => 'Ce este Web2sms',
@@ -288,7 +288,7 @@ class WC_Settings_Web2sms {
         return apply_filters( 'wc_settings_web2sms_settings', $settings );
     }
 
-    public function getSettingOption($option) {
+    public function web2sms_getSettingOption($option) {
         global $wpdb;
         switch ($option) {
             case 'active':
@@ -317,21 +317,21 @@ class WC_Settings_Web2sms {
         }
     }
 
-    public function hasApikey() {
-        return !empty($this->getSettingOption('apikey')) ? true : false;
+    public function web2sms_hasApikey() {
+        return !empty($this->web2sms_getSettingOption('apikey')) ? true : false;
     }
 
     public function hasSecretkey() {
-        return !empty($this->getSettingOption('secretkey')) ? true : false;
+        return !empty($this->web2sms_getSettingOption('secretkey')) ? true : false;
     }
 
     /**
      * Verify if web2sms is enable and ready to use
      */
-    function isEnable() {
-        $enable = $this->getSettingOption('active') == 'yes' ? true : false;
+    function web2sms_isEnable() {
+        $enable = $this->web2sms_getSettingOption('active') == 'yes' ? true : false;
         if($enable) {
-            if($this->hasApikey() && $this->hasSecretkey()) {
+            if($this->web2sms_hasApikey() && $this->hasSecretkey()) {
                 return true;
             } else {
                 return false;
@@ -344,13 +344,13 @@ class WC_Settings_Web2sms {
     /**
      * Verify if send sms set for order status
      */
-    function isActive($orderStatus) {
-        if(!$this->isEnable()){
+    function web2sms_isActive($orderStatus) {
+        if(!$this->web2sms_isEnable()){
             return false;
         }
         
-        $activeStatus = $this->getSettingOption($orderStatus.'_status') == 'yes' ? true : false;
-        $hasContent = !empty($this->getSettingOption($orderStatus.'_text')) ? true : false;
+        $activeStatus = $this->web2sms_getSettingOption($orderStatus.'_status') == 'yes' ? true : false;
+        $hasContent = !empty($this->web2sms_getSettingOption($orderStatus.'_text')) ? true : false;
         
         if($activeStatus && $hasContent) {
            return true;
@@ -363,11 +363,11 @@ class WC_Settings_Web2sms {
 }
 
 $ntpWeb2sms = new WC_Settings_Web2sms();
-$ntpWeb2sms->init();
+$ntpWeb2sms->web2sms_initialization();
 
 
-add_action('woocommerce_order_status_changed', 'woo_order_status_change_custom', 10, 1);
-function woo_order_status_change_custom($order_id) {
+add_action('woocommerce_order_status_changed', 'web2sms_woo_order_status_change_custom', 10, 1);
+function web2sms_woo_order_status_change_custom($order_id) {
     $web2sms = new WC_Settings_Web2sms();   
 
     $order = wc_get_order( $order_id );
@@ -375,7 +375,7 @@ function woo_order_status_change_custom($order_id) {
     $smsOrderStatus = $order->status;
     $smsReciverName = $order->get_billing_first_name();
     $smsCellPhoneNr = $order->get_billing_phone();
-    $smsContentThem = $web2sms->getSettingOption($smsOrderStatus.'_text');
+    $smsContentThem = $web2sms->web2sms_getSettingOption($smsOrderStatus.'_text');
 
     /**
      * Regenerate / Customize SMS Content
@@ -393,13 +393,13 @@ function woo_order_status_change_custom($order_id) {
     /**
      *  Send SMS
      * */ 
-    if($web2sms->isActive($smsOrderStatus)) {
-        sendSMS($smsCellPhoneNr, $smsContent);
+    if($web2sms->web2sms_isActive($smsOrderStatus)) {
+        web2sms_sendSMS($smsCellPhoneNr, $smsContent);
     }
 }
 
 
-function sendSMS($smsCellPhoneNr, $smsContent){
+function web2sms_sendSMS($smsCellPhoneNr, $smsContent){
     
     $web2sms = new WC_Settings_Web2sms();
     
@@ -410,8 +410,8 @@ function sendSMS($smsCellPhoneNr, $smsContent){
     /**
      * Postpaid account
      */
-    $sendSMS->apiKey     = $web2sms->getSettingOption('apikey');
-    $sendSMS->secretKey  = $web2sms->getSettingOption('secretkey');
+    $sendSMS->apiKey     = $web2sms->web2sms_getSettingOption('apikey');
+    $sendSMS->secretKey  = $web2sms->web2sms_getSettingOption('secretkey');
 
     $smsBody = $smsContent;
     $smsRecipient = sprintf("%s", $smsCellPhoneNr);
@@ -434,17 +434,8 @@ function sendSMS($smsCellPhoneNr, $smsContent){
 }
 
 
-/**
- * Set Log
- */
-function setLog($data) {
-    //Log the data to your file using file_put_contents.
-    file_put_contents(plugin_dir_path( __FILE__ )."logs/smslog.log", print_r($data, true)."\n", FILE_APPEND);
-}
-
-
-add_action( 'wp_ajax_sms_content_calculation', 'sms_content_calculation' );
-function sms_content_calculation() {
+add_action( 'wp_ajax_web2sms_sms_content_calculation', 'web2sms_sms_content_calculation' );
+function web2sms_sms_content_calculation() {
     session_start();
 	global $wpdb;
     $strFind = array("%ordId%", "%name%", "%lastname%", "%email%");
@@ -478,15 +469,15 @@ if ( ! wp_next_scheduled( 'web2sms_cart_notify' ) ) {
 /**
  * Hook into that action that'll fire every five minutes 
  */
-add_action( 'web2sms_cart_notify', 'web2smsReminder' );
-function web2smsReminder() {
+add_action( 'web2sms_cart_notify', 'web2sms_reminder' );
+function web2sms_reminder() {
     global $wpdb;
     $web2sms = new WC_Settings_Web2sms();
     /** 
      * Check reminder is set 
      * */
-    $reminderStatus = $web2sms->getSettingOption('reminder') == 'yes' ? true : false;
-    $reminderContent = $web2sms->getSettingOption('reminder_text');
+    $reminderStatus = $web2sms->web2sms_getSettingOption('reminder') == 'yes' ? true : false;
+    $reminderContent = $web2sms->web2sms_getSettingOption('reminder_text');
     $hasReminderContent = !empty($reminderContent) ? true : false;
     
     if(!$reminderStatus || !$hasReminderContent) {
@@ -528,7 +519,7 @@ function web2smsReminder() {
         # Verify info
         $userInfo = json_decode($abandonedCart->userInfo);
         if(!empty($userInfo->billing_phone)) {
-            if(isValidPhoneNumber($userInfo->billing_phone)) {
+            if(web2sms_isValidPhoneNumber($userInfo->billing_phone)) {
                 /**
                  * Regenerate / Customize SMS Content
                  */
@@ -545,7 +536,7 @@ function web2smsReminder() {
                 /**
                  *  Send SMS as reminder
                  **/ 
-                if($web2sms->isEnable()) {
+                if($web2sms->web2sms_isEnable()) {
                   $sendSmsResult = sendSMS($reminderPhoneNr, $smsContent);
                 }
 
@@ -579,7 +570,7 @@ function web2smsReminder() {
 /**
  * Validate mobil number before send SMS
  */
-function isValidPhoneNumber($phone_number) {
+function web2sms_isValidPhoneNumber($phone_number) {
     if(preg_match('/^[0,7]{2}[0-9]{8}+$/', $phone_number)) {
         return true;
     } else{
@@ -667,7 +658,7 @@ function web2sms_store_abandoned_cart() {
         }
     } else {
         $userType = "guest";
-        $userId   = getCartSession( 'user_id' );
+        $userId   = web2sms_getCartSession( 'user_id' );
 
 		$cartData         = array();
         if ( function_exists( 'WC' ) ) {
@@ -728,7 +719,7 @@ function web2sms_store_abandoned_cart() {
 /**
  * Get session key if exist
  */
-function getCartSession( $session_key ) {
+function web2sms_getCartSession( $session_key ) {
     if (!is_object( WC()->session)) {
         return false;
     }

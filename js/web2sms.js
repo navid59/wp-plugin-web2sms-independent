@@ -138,7 +138,7 @@ function smsCalculation(str, isStandard, web2smsPluginUrl) {
     }
    
     var data = {
-        'action': 'sms_content_calculation',
+        'action': 'web2sms_sms_content_calculation',
         'str': str
     };
     // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
