@@ -1,62 +1,65 @@
 <?php
-
-require_once ('vendor/autoload.php');
+/**
+ * Assign Web2sms library to plugin
+ */
+require_once 'vendor/autoload.php';
 use Web2sms\Sms\SendSMS;
 
 class WC_Settings_Web2sms {
     public $slug = 'wc_settings_web2sms';
-    public $smsOrderId, $smsOrderStatus, $smsReciverName, $smsCellPhoneNr;
-    /*
+    public $smsOrderStatus, $smsReciverName, $smsCellPhoneNr;
+    /**
      * Bootstraps the class and hooks required actions & filters.
      *
      */
-    public static function web2sms_initialization() {
-        add_filter( 'woocommerce_settings_tabs_array', __CLASS__ . '::web2sms_add_settings_tab', 50 );
-        add_action( 'woocommerce_settings_tabs_settings_tab_web2sms', __CLASS__ . '::web2sms_settings_tab' );
-        add_action( 'woocommerce_update_options_settings_tab_web2sms', __CLASS__ . '::web2sms_update_settings' );
-    }
+    public static function web2smsInitialization()
+        {
+        add_filter('woocommerce_settings_tabs_array', __CLASS__ . '::web2smsAddSettingsTab', 50);
+        add_action('woocommerce_settings_tabs_settings_tab_web2sms', __CLASS__ . '::web2smsSettingsTab');
+        add_action('woocommerce_update_options_settings_tab_web2sms', __CLASS__ . '::web2smsUpdateSettings');
+        }
     
     
-    /*
+    /**
      * Add a new settings tab to the WooCommerce settings tabs array.
      *
      * @param array $settings_tabs Array of WooCommerce setting tabs & their labels, excluding the Subscription tab.
      * @return array $settings_tabs Array of WooCommerce setting tabs & their labels, including the Subscription tab.
      */
-    public static function web2sms_add_settings_tab( $settings_tabs ) {
+    public static function web2smsAddSettingsTab( $settings_tabs ) {
         $settings_tabs['settings_tab_web2sms'] = 'WEB2SMS Settings';
         return $settings_tabs;
     }
 
 
-    /*
+    /**
      * Uses the WooCommerce admin fields API to output settings via the @see woocommerce_admin_fields() function.
      *
      * @uses woocommerce_admin_fields()
-     * @uses self::web2sms_get_settings()
+     * @uses self::web2smsGetSettings()
      */
-    public static function web2sms_settings_tab() {
-        woocommerce_admin_fields( self::web2sms_get_settings() );
+    public static function web2smsSettingsTab() {
+        woocommerce_admin_fields( self::web2smsGetSettings() );
     }
 
 
-    /*
+    /**
      * Uses the WooCommerce options API to save settings via the @see woocommerce_update_options() function.
      *
      * @uses woocommerce_update_options()
-     * @uses self::web2sms_get_settings()
+     * @uses self::web2smsGetSettings()
      */
-    public static function web2sms_update_settings() {
-        woocommerce_update_options( self::web2sms_get_settings() );
+    public static function web2smsUpdateSettings() {
+        woocommerce_update_options( self::web2smsGetSettings() );
     }
 
 
-    /*
+    /**
      * Get all the settings for this plugin for @see woocommerce_admin_fields() function.
      *
      * @return array Array of settings for @see woocommerce_admin_fields() function.
      */
-    public static function web2sms_get_settings() {
+    public static function web2smsGetSettings() {
         $settings = array(
             'section_title' => array(
                     'name'     => 'Ce este Web2sms',
@@ -71,30 +74,30 @@ class WC_Settings_Web2sms {
                     'css'       => '',
             ),
             'active' => array(
-                    'name'		=> 'Enable / Disable',
-                    'type'		=> 'checkbox',
-                    'desc'      => 'Bifeaza daca doresti trimiterea mesajelor de informare catre clientii tai.',
-                    'default'	=> 'no',
-                    'id'        => 'wc_settings_web2sms_active',
-                    'css'       => '',
-			),
+                    'name'        => 'Enable / Disable',
+                    'type'        => 'checkbox',
+                    'desc'        => 'Bifeaza daca doresti trimiterea mesajelor de informare catre clientii tai.',
+                    'default'     => 'no',
+                    'id'          => 'wc_settings_web2sms_active',
+                    'css'         => '',
+            ),
             'apikey' => array(
-                    'name'      => 'Api key',
+                    'name'        => 'Api key',
                     'placeholder' => 'Cheia unica asociata contului tau web2sms.',
-                    'desc_tip'  => 'Api key de la web2sms.ro',
-                    'type'      => 'text',
-                    'desc'      => 'API cheia, se poate accesa din meniul Dashboard, in <a href="https://www.web2sms.ro/" target="_blank">www.web2sms.ro</a>',
-                    'id'        => 'wc_settings_web2sms_apikey',
-                    'css'       => '',
+                    'desc_tip'    => 'Api key de la web2sms.ro',
+                    'type'        => 'text',
+                    'desc'        => 'API cheia, se poate accesa din meniul Dashboard, in <a href="https://www.web2sms.ro/" target="_blank">www.web2sms.ro</a>',
+                    'id'          => 'wc_settings_web2sms_apikey',
+                    'css'         => '',
             ),
             'secretkey' => array(
-                    'name'      => 'Secret key',
+                    'name'        => 'Secret key',
                     'placeholder' => 'Cheia secreta asociata contului tau web2sms.',
-                    'desc_tip'  => 'Secret key de la web2sms.ro',
-                    'type'      => 'text',
-                    'desc'      => 'Cheia secreta, se poate accesa din meniul Dashboard, in <a href="https://www.web2sms.ro/" target="_blank">www.web2sms.ro</a>',
-                    'id'        => 'wc_settings_web2sms_secretkey',
-                    'css'       => '',
+                    'desc_tip'    => 'Secret key de la web2sms.ro',
+                    'type'        => 'text',
+                    'desc'        => 'Cheia secreta, se poate accesa din meniul Dashboard, in <a href="https://www.web2sms.ro/" target="_blank">www.web2sms.ro</a>',
+                    'id'          => 'wc_settings_web2sms_secretkey',
+                    'css'         => '',
             ),
             'pending_sms_content' => array(
                     'name'        => 'Pending text',
@@ -106,13 +109,13 @@ class WC_Settings_Web2sms {
                     'css'         => '',
             ),
             'pending' => array(
-                    'name'		 => 'Pending',
+                    'name'       => 'Pending',
                     'desc_tip'   => '<button type="button" id="btn_pending" class="btn btn-lg btn-primary">vezi cum arata</button>',
-                    'type'		 => 'checkbox',
+                    'type'       => 'checkbox',
                     'desc'       => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "Pending".',
                     'id'         => 'wc_settings_web2sms_pending_status',
-                    'default'	 => 'no',
-                    'css'       => '',
+                    'default'    => 'no',
+                    'css'        => '',
             ),
             'onhold_sms_content' => array(
                     'name'        => 'On-Hold text',
@@ -124,15 +127,15 @@ class WC_Settings_Web2sms {
                     'css'         => '',
             ),
             'onhold' => array(
-                    'name'		=> 'On-Hold',
-                    'desc_tip'  => '<button type="button" id="btn_onhold" class="btn btn-lg btn-primary">vezi cum arata</button>',
-                    'type'		=> 'checkbox',
-                    'desc'      => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "On-Hold"',
-                    'id'        => 'wc_settings_web2sms_on-hold_status',
-                    'default'	=> 'no',
-                    'css'       => '',
+                    'name'       => 'On-Hold',
+                    'desc_tip'   => '<button type="button" id="btn_onhold" class="btn btn-lg btn-primary">vezi cum arata</button>',
+                    'type'       => 'checkbox',
+                    'desc'       => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "On-Hold"',
+                    'id'         => 'wc_settings_web2sms_on-hold_status',
+                    'default'    => 'no',
+                    'css'        => '',
             ),
-            'failed_sms_content' => array(
+            'failed_sms_content'  => array(
                     'name'        => 'Failed text',
                     'placeholder' => '',
                     'desc_tip'    => 'The sms text, what client will recive by sms on order status Failed',
@@ -141,13 +144,13 @@ class WC_Settings_Web2sms {
                     'id'          => 'wc_settings_web2sms_failed_text',
                     'css'         => '',
             ),'failed' => array(
-                    'name'		=> 'Faild',
-                    'desc_tip'   => '<button type="button" id="btn_failed" class="btn btn-lg btn-primary">vezi cum arata</button>',
-                    'type'		=> 'checkbox',
-                    'desc'      => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "Failed"',
-                    'id'        => 'wc_settings_web2sms_failed_status',
-                    'default'	=> 'no',
-                    'css'       => '',
+                    'name'        => 'Faild',
+                    'desc_tip'    => '<button type="button" id="btn_failed" class="btn btn-lg btn-primary">vezi cum arata</button>',
+                    'type'        => 'checkbox',
+                    'desc'        => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "Failed"',
+                    'id'          => 'wc_settings_web2sms_failed_status',
+                    'default'     => 'no',
+                    'css'         => '',
             ),
             'processing_sms_content' => array(
                     'name'        => 'Processing text',
@@ -159,32 +162,32 @@ class WC_Settings_Web2sms {
                     'css'         => '',
             ),
             'processing' => array(
-                    'name'		=> 'Processing',
+                    'name'       => 'Processing',
                     'desc_tip'   => '<button type="button" id="btn_processing" class="btn btn-lg btn-primary">vezi cum arata</button>',
-                    'type'		=> 'checkbox',
-                    'desc'      => ' Bifeaza pentru trimiterea SMS daca o comanda este in starea "in Procesare"',
-                    'id'        => 'wc_settings_web2sms_processing_status',
-                    'default'	=> 'no',
-                    'css'       => '',
+                    'type'       => 'checkbox',
+                    'desc'       => ' Bifeaza pentru trimiterea SMS daca o comanda este in starea "in Procesare"',
+                    'id'         => 'wc_settings_web2sms_processing_status',
+                    'default'    => 'no',
+                    'css'        => '',
             ),
             'cancelled_sms_content' => array(
                     'name'        => 'Cancelled text',
                     'placeholder' => '',
                     'desc_tip'    => 'The sms text, what client will recive by sms on order status Cancelled',
-                    'type'		  => 'textarea',
+                    'type'        => 'textarea',
                     'desc'        => 'Scrie textul SMS-ului care se va trimite atunci cand o comanda este in stare "Anulata".',
                     'id'          => 'wc_settings_web2sms_cancelled_text',
-                    'default'	  => '',
+                    'default'     => '',
                     'css'         => '',
-			),
+            ),
             'cancelled' => array(
-                    'name'		=> 'Cancelled',
-                    'desc_tip'  => '<button type="button" id="btn_cancelled" class="btn btn-lg btn-primary">vezi cum arata</button>',
-                    'type'		=> 'checkbox',
-                    'desc'      => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "Anulata"',
-                    'id'        => 'wc_settings_web2sms_cancelled_status',
-                    'default'	=> 'no',
-                    'css'       => '',
+                    'name'        => 'Cancelled',
+                    'desc_tip'    => '<button type="button" id="btn_cancelled" class="btn btn-lg btn-primary">vezi cum arata</button>',
+                    'type'        => 'checkbox',
+                    'desc'        => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "Anulata"',
+                    'id'          => 'wc_settings_web2sms_cancelled_status',
+                    'default'     => 'no',
+                    'css'         => '',
             ),
             'completed_sms_content' => array(
                     'name'        => 'Completed text',
@@ -196,13 +199,13 @@ class WC_Settings_Web2sms {
                     'css'         => '',
             ),
             'completed' => array(
-                    'name'		=> 'Completed',
-                    'desc_tip'  => '<button type="button" id="btn_completed" class="btn btn-lg btn-primary">vezi cum arata</button>',
-                    'type'		=> 'checkbox',
-                    'desc'      => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "Finalizata"',
-                    'id'        => 'wc_settings_web2sms_completed_status',
-                    'default'	=> 'no',
-                    'css'       => '',
+                    'name'        => 'Completed',
+                    'desc_tip'    => '<button type="button" id="btn_completed" class="btn btn-lg btn-primary">vezi cum arata</button>',
+                    'type'        => 'checkbox',
+                    'desc'        => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "Finalizata"',
+                    'id'          => 'wc_settings_web2sms_completed_status',
+                    'default'     => 'no',
+                    'css'         => '',
             ),
             'refunded_sms_content' => array(
                     'name'        => 'Refunded text',
@@ -214,13 +217,13 @@ class WC_Settings_Web2sms {
                     'css'         => '',
             ),
             'refunded' => array(
-                    'name'		=> 'Refunded',
-                    'desc_tip'  => '<button type="button" id="btn_refunded" class="btn btn-lg btn-primary">vezi cum arata</button>',
-                    'type'		=> 'checkbox',
-                    'desc'      => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "Creditata"',
-                    'id'        => 'wc_settings_web2sms_refunded_status',
-                    'default'	=> 'no',
-                    'css'       => '',
+                    'name'        => 'Refunded',
+                    'desc_tip'    => '<button type="button" id="btn_refunded" class="btn btn-lg btn-primary">vezi cum arata</button>',
+                    'type'        => 'checkbox',
+                    'desc'        => 'Bifeaza pentru trimiterea SMS daca o comanda este in starea "Creditata"',
+                    'id'          => 'wc_settings_web2sms_refunded_status',
+                    'default'     => 'no',
+                    'css'         => '',
             ),
             'setting_section_end' => array(
                 'type' => 'sectionend',
@@ -271,13 +274,13 @@ class WC_Settings_Web2sms {
                 'css'         => '',
             ),
             'reminder' => array(
-                'name'		=> 'reminder',
-                'desc_tip'  => '<button type="button" id="btn_reminder" class="btn btn-lg btn-primary">vezi cum arata</button>',
-                'type'		=> 'checkbox',
-                'desc'      => 'Bifeaza daca doresti sa trimiteti SMS prentru cosuri "Abandonate".',
-                'id'        => 'wc_settings_web2sms_reminder',
-                'default'	=> 'no',
-                'css'       => '',
+                'name'        => 'reminder',
+                'desc_tip'    => '<button type="button" id="btn_reminder" class="btn btn-lg btn-primary">vezi cum arata</button>',
+                'type'        => 'checkbox',
+                'desc'        => 'Bifeaza daca doresti sa trimiteti SMS prentru cosuri "Abandonate".',
+                'id'          => 'wc_settings_web2sms_reminder',
+                'default'     => 'no',
+                'css'         => '',
             ),
             'reminder_section_end' => array(
                  'type' => 'sectionend',
@@ -285,53 +288,63 @@ class WC_Settings_Web2sms {
             )
         );
 
-        return apply_filters( 'wc_settings_web2sms_settings', $settings );
+        return apply_filters('wc_settings_web2sms_settings', $settings);
     }
 
-    public function web2sms_getSettingOption($option) {
+    /**
+     * To get value of seeting options
+     */
+    public function web2smsGetSettingOption($option) {
         global $wpdb;
-        switch ($option) {
-            case 'active':
-            case 'apikey':
-            case 'secretkey':
-            case 'pending_status':
-            case 'pending_text':
-            case 'on-hold_status':
-            case 'on-hold_text':
-            case 'failed_status':
-            case 'failed_text':
-            case 'processing_status':
-            case 'processing_text':
-            case 'cancelled_status':
-            case 'cancelled_text':
-            case 'completed_status':
-            case 'completed_text':
-            case 'refunded_status':
-            case 'refunded_text':
-            case 'reminder':
-            case 'reminder_text':
-                return  get_option($this->slug.'_'.$option, array());
+        switch ($option) 
+        {
+        case 'active':
+        case 'apikey':
+        case 'secretkey':
+        case 'pending_status':
+        case 'pending_text':
+        case 'on-hold_status':
+        case 'on-hold_text':
+        case 'failed_status':
+        case 'failed_text':
+        case 'processing_status':
+        case 'processing_text':
+        case 'cancelled_status':
+        case 'cancelled_text':
+        case 'completed_status':
+        case 'completed_text':
+        case 'refunded_status':
+        case 'refunded_text':
+        case 'reminder':
+        case 'reminder_text':
+            return  get_option($this->slug.'_'.$option, array());
                 break;
-            default:
-                throw new \Exception('Web2sms -> '.$option.' not exist!');
+        default:
+            throw new \Exception('Web2sms -> '.$option.' not exist!');
         }
     }
 
-    public function web2sms_hasApikey() {
-        return !empty($this->web2sms_getSettingOption('apikey')) ? true : false;
+    /**
+     * Check if ApiKey is set in configuration
+     */
+    public function web2smsHasApikey() {
+        return !empty($this->web2smsGetSettingOption('apikey')) ? true : false;
     }
 
-    public function hasSecretkey() {
-        return !empty($this->web2sms_getSettingOption('secretkey')) ? true : false;
+    /**
+     * Check if SecretKey is set in configuration
+     */
+    public function web2smsHasSecretkey() {
+        return !empty($this->web2smsGetSettingOption('secretkey')) ? true : false;
     }
 
     /**
      * Verify if web2sms is enable and ready to use
      */
-    function web2sms_isEnable() {
-        $enable = $this->web2sms_getSettingOption('active') == 'yes' ? true : false;
-        if($enable) {
-            if($this->web2sms_hasApikey() && $this->hasSecretkey()) {
+    function web2smsIsEnable() {
+        $enable = $this->web2smsGetSettingOption('active') == 'yes' ? true : false;
+        if ($enable) {
+            if ($this->web2smsHasApikey() && $this->web2smsHasSecretkey()) {
                 return true;
             } else {
                 return false;
@@ -342,40 +355,40 @@ class WC_Settings_Web2sms {
     }
 
     /**
-     * Verify if send sms set for order status
+     * Verify if send sms set for this order status
      */
-    function web2sms_isActive($orderStatus) {
-        if(!$this->web2sms_isEnable()){
+    function web2smsIsActive($orderStatus) 
+        {
+        if (!$this->web2smsIsEnable()) {
             return false;
         }
         
-        $activeStatus = $this->web2sms_getSettingOption($orderStatus.'_status') == 'yes' ? true : false;
-        $hasContent = !empty($this->web2sms_getSettingOption($orderStatus.'_text')) ? true : false;
+        $activeStatus = $this->web2smsGetSettingOption($orderStatus.'_status') == 'yes' ? true : false;
+        $hasContent = !empty($this->web2smsGetSettingOption($orderStatus.'_text')) ? true : false;
         
-        if($activeStatus && $hasContent) {
-           return true;
+        if ($activeStatus && $hasContent) {
+            return true;
         } else {
             return false;
         }
     }
-
-
 }
 
 $ntpWeb2sms = new WC_Settings_Web2sms();
-$ntpWeb2sms->web2sms_initialization();
+$ntpWeb2sms->web2smsInitialization();
 
-
-add_action('woocommerce_order_status_changed', 'web2sms_woo_order_status_change_custom', 10, 1);
-function web2sms_woo_order_status_change_custom($order_id) {
+/**
+ * Called when a order status changed
+ * Send SMS if for current status is configured
+ */
+function web2smsWooOrderStatusChangeCustom($order_id) {
     $web2sms = new WC_Settings_Web2sms();   
 
-    $order = wc_get_order( $order_id );
-    $smsOrderId = $order_id;
+    $order = wc_get_order($order_id);
     $smsOrderStatus = $order->status;
     $smsReciverName = $order->get_billing_first_name();
     $smsCellPhoneNr = $order->get_billing_phone();
-    $smsContentThem = $web2sms->web2sms_getSettingOption($smsOrderStatus.'_text');
+    $smsContentThem = $web2sms->web2smsGetSettingOption($smsOrderStatus.'_text');
 
     /**
      * Regenerate / Customize SMS Content
@@ -393,25 +406,32 @@ function web2sms_woo_order_status_change_custom($order_id) {
     /**
      *  Send SMS
      * */ 
-    if($web2sms->web2sms_isActive($smsOrderStatus)) {
-        web2sms_sendSMS($smsCellPhoneNr, $smsContent);
+    if ($web2sms->web2smsIsActive($smsOrderStatus)) {
+        web2smsSendSMS($smsCellPhoneNr, $smsContent);
     }
 }
+add_action('woocommerce_order_status_changed', 'web2smsWooOrderStatusChangeCustom', 10, 1);
 
-
-function web2sms_sendSMS($smsCellPhoneNr, $smsContent){
+/**
+ * Set the parameteres for sending SMS 
+ * Send a SMS by using web2sms library
+ * 
+ * @param $smsCellPhoneNr is the sms reciver
+ * @param $smsContent     is the SMS content 
+ */
+function web2smsSendSMS($smsCellPhoneNr, $smsContent){
     
     $web2sms = new WC_Settings_Web2sms();
     
-
+    // Create object of class SendSMS form web2sms Library
     $sendSMS = new SendSMS();
     $sendSMS->accountType = 'prepaid';                                                  // postpaid | prepaid
 
     /**
      * Postpaid account
      */
-    $sendSMS->apiKey     = $web2sms->web2sms_getSettingOption('apikey');
-    $sendSMS->secretKey  = $web2sms->web2sms_getSettingOption('secretkey');
+    $sendSMS->apiKey     = $web2sms->web2smsGetSettingOption('apikey');
+    $sendSMS->secretKey  = $web2sms->web2smsGetSettingOption('secretkey');
 
     $smsBody = $smsContent;
     $smsRecipient = sprintf("%s", $smsCellPhoneNr);
@@ -434,24 +454,26 @@ function web2sms_sendSMS($smsCellPhoneNr, $smsContent){
 }
 
 
-add_action( 'wp_ajax_web2sms_sms_content_calculation', 'web2sms_sms_content_calculation' );
-function web2sms_sms_content_calculation() {
-    session_start();
-	global $wpdb;
+/**
+ * Calculate nr of characters & sms 
+ * Based on definated sms content
+ */
+function web2smsSmsContentCalculation() {
+    global $wpdb;
     $strFind = array("%ordId%", "%name%", "%lastname%", "%email%");
     $strReplace = array("1234", "ClientName", "ClientLastname", "client@email.com");
     $strContent = str_replace($strFind, $strReplace, sanitize_text_field($_POST['str']));
-    $_SESSION['smsStrContent']   = $strContent;
-	wp_die(); // this is required to terminate immediately and return a proper response
+    wp_send_json($strContent);
 }
+add_action( 'wp_ajax_web2smsSmsContentCalculation', 'web2smsSmsContentCalculation' );
 
 
 /**
  * To set cron job
  * See http://codex.wordpress.org/Plugin_API/Filter_Reference/cron_schedules
  */
-add_filter( 'cron_schedules', 'web2sms_cart_notify' );
-function web2sms_cart_notify( $schedules ) {
+add_filter( 'cron_schedules', 'web2smsCartNotify' );
+function web2smsCartNotify( $schedules ) {
     $schedules['schedule_time'] = array(
             'interval'  => 60 * 1,
             'display'   => 'Web2sms reminder cron'
@@ -462,22 +484,22 @@ function web2sms_cart_notify( $schedules ) {
 /**
  * Schedule an action if it's not already scheduled
  */
-if ( ! wp_next_scheduled( 'web2sms_cart_notify' ) ) {
-    wp_schedule_event( time(), 'schedule_time', 'web2sms_cart_notify' );
+if ( ! wp_next_scheduled( 'web2smsCartNotify' ) ) {
+    wp_schedule_event( time(), 'schedule_time', 'web2smsCartNotify' );
 }
 
 /**
  * Hook into that action that'll fire every five minutes 
  */
-add_action( 'web2sms_cart_notify', 'web2sms_reminder' );
-function web2sms_reminder() {
+add_action( 'web2smsCartNotify', 'web2smsReminder' );
+function web2smsReminder() {
     global $wpdb;
     $web2sms = new WC_Settings_Web2sms();
     /** 
      * Check reminder is set 
      * */
-    $reminderStatus = $web2sms->web2sms_getSettingOption('reminder') == 'yes' ? true : false;
-    $reminderContent = $web2sms->web2sms_getSettingOption('reminder_text');
+    $reminderStatus = $web2sms->web2smsGetSettingOption('reminder') == 'yes' ? true : false;
+    $reminderContent = $web2sms->web2smsGetSettingOption('reminder_text');
     $hasReminderContent = !empty($reminderContent) ? true : false;
     
     if(!$reminderStatus || !$hasReminderContent) {
@@ -516,10 +538,10 @@ function web2sms_reminder() {
     );
 
     foreach ($results as $abandonedCart) {
-        # Verify info
+        // Verify info
         $userInfo = json_decode($abandonedCart->userInfo);
-        if(!empty($userInfo->billing_phone)) {
-            if(web2sms_isValidPhoneNumber($userInfo->billing_phone)) {
+        if (!empty($userInfo->billing_phone)) {
+            if (web2smsIsValidPhoneNumber($userInfo->billing_phone)) {
                 /**
                  * Regenerate / Customize SMS Content
                  */
@@ -536,8 +558,8 @@ function web2sms_reminder() {
                 /**
                  *  Send SMS as reminder
                  **/ 
-                if($web2sms->web2sms_isEnable()) {
-                  $sendSmsResult = sendSMS($reminderPhoneNr, $smsContent);
+                if ($web2sms->web2smsIsEnable()) {
+                    $sendSmsResult = web2smsSendSMS($reminderPhoneNr, $smsContent);
                 }
 
 
@@ -570,7 +592,7 @@ function web2sms_reminder() {
 /**
  * Validate mobil number before send SMS
  */
-function web2sms_isValidPhoneNumber($phone_number) {
+function web2smsIsValidPhoneNumber($phone_number) {
     if(preg_match('/^[0,7]{2}[0-9]{8}+$/', $phone_number)) {
         return true;
     } else{
@@ -583,23 +605,23 @@ function web2sms_isValidPhoneNumber($phone_number) {
  */
 
 // Actions to be done on cart update.
-add_action( 'woocommerce_add_to_cart', 'web2sms_store_abandoned_cart');
-add_action( 'woocommerce_cart_item_removed', 'web2sms_store_abandoned_cart');
-add_action( 'woocommerce_cart_item_restored', 'web2sms_store_abandoned_cart');
-add_action( 'woocommerce_after_cart_item_quantity_update', 'web2sms_store_abandoned_cart');
-add_action( 'woocommerce_calculate_totals', 'web2sms_store_abandoned_cart');
-add_action( 'woocommerce_after_checkout_validation', 'web2sms_checkout_validation_cart');
-add_action( 'woocommerce_checkout_order_processed', 'web2sms_checkout_order_processed');
+add_action( 'woocommerce_add_to_cart', 'web2smsStoreAbandonedCart');
+add_action( 'woocommerce_cart_item_removed', 'web2smsStoreAbandonedCart');
+add_action( 'woocommerce_cart_item_restored', 'web2smsStoreAbandonedCart');
+add_action( 'woocommerce_after_cart_item_quantity_update', 'web2smsStoreAbandonedCart');
+add_action( 'woocommerce_calculate_totals', 'web2smsStoreAbandonedCart');
+add_action( 'woocommerce_after_checkout_validation', 'web2smsCheckoutValidationCart');
+add_action( 'woocommerce_checkout_order_processed', 'web2smsCheckoutOrderProcessed');
 
 
 /**
  * Temporary storage of cart
  */
-function web2sms_store_abandoned_cart() {
+function web2smsStoreAbandonedCart() {
     global $wpdb,$woocommerce;
-	$currentTime = current_time( 'timestamp' );
+    $currentTime = current_time( 'timestamp' );
     
-    if ( is_user_logged_in() ) {
+    if (is_user_logged_in()) {
         $userType  = "registered";
         /**
          * Get user info
@@ -617,8 +639,8 @@ function web2sms_store_abandoned_cart() {
          * Verify if cart is already monitoring
          */
         $results = $wpdb->get_results( 
-                        $wpdb->prepare('SELECT * FROM `' . $wpdb->prefix . 'web2sms_abandoned_cart` WHERE userId = %d AND smsRetry = %s ', $userId, 0)
-                    );
+            $wpdb->prepare('SELECT * FROM `' . $wpdb->prefix . 'web2sms_abandoned_cart` WHERE userId = %d AND smsRetry = %s ', $userId, 0)
+        );
 
         if (count( $results ) === 0 ) {
             if ( '' !== $cartData && '{"cart":[]}' !== $cartData && '""' !== $cartData ) {
@@ -644,7 +666,7 @@ function web2sms_store_abandoned_cart() {
         } else {
             $updatedCartInfo         = array();
             $updatedCartInfo['cart'] = WC()->session->cart;
-            $cartInfo                  = wp_json_encode( $updatedCartInfo );
+            $cartInfo                = wp_json_encode( $updatedCartInfo );
 
             $wpdb->query( 
                 $wpdb->prepare(
@@ -658,7 +680,7 @@ function web2sms_store_abandoned_cart() {
         }
     } else {
         $userType = "guest";
-        $userId   = web2sms_getCartSession( 'user_id' );
+        $userId   = web2smsGetCartSession( 'user_id' );
 
 		$cartData         = array();
         if ( function_exists( 'WC' ) ) {
@@ -719,7 +741,7 @@ function web2sms_store_abandoned_cart() {
 /**
  * Get session key if exist
  */
-function web2sms_getCartSession( $session_key ) {
+function web2smsGetCartSession( $session_key ) {
     if (!is_object( WC()->session)) {
         return false;
     }
@@ -729,7 +751,7 @@ function web2sms_getCartSession( $session_key ) {
 /**
  * Checkout validation cart
  */
-function web2sms_checkout_validation_cart($checkouArg){
+function web2smsCheckoutValidationCart($checkouArg){
     global $wpdb;
     $sessionId   = WC()->session->get_customer_id();
 
@@ -754,7 +776,7 @@ function web2sms_checkout_validation_cart($checkouArg){
 /**
  * Checkout validation order processed
  */
-function web2sms_checkout_order_processed($orderId){
+function web2smsCheckoutOrderProcessed($orderId){
     global $wpdb;
     $sessionId   = WC()->session->get_customer_id();
     

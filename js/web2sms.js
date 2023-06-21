@@ -11,7 +11,6 @@ jQuery(document).ready(function(){
     jQuery("#btn_pending").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_pending_text').val();
         if(isEmpty(pendingStr)) {
-            console.log('Is empty');
             toastr.error('Please, enter a SMS content for pending status!', 'Error!');
             return false;
         }
@@ -23,7 +22,6 @@ jQuery(document).ready(function(){
     jQuery("#btn_onhold").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_on-hold_text').val();
         if(isEmpty(pendingStr)) {
-            console.log('Is empty');
             toastr.error('Please, enter a SMS content for On-Hols status!', 'Error!');
             return false;
         }
@@ -35,7 +33,6 @@ jQuery(document).ready(function(){
     jQuery("#btn_failed").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_failed_text').val();
         if(isEmpty(pendingStr)) {
-            console.log('Is empty');
             toastr.error('Please, enter a SMS content for failed status!', 'Error!');
             return false;
         }
@@ -47,7 +44,6 @@ jQuery(document).ready(function(){
     jQuery("#btn_processing").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_processing_text').val();
         if(isEmpty(pendingStr)) {
-            console.log('Is empty');
             toastr.error('Please, enter a SMS content for processing status!', 'Error!');
             return false;
         }
@@ -59,7 +55,6 @@ jQuery(document).ready(function(){
     jQuery("#btn_cancelled").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_cancelled_text').val();
         if(isEmpty(pendingStr)) {
-            console.log('Is empty');
             toastr.error('Please, enter a SMS content for cancelled status!', 'Error!');
             return false;
         }
@@ -71,7 +66,6 @@ jQuery(document).ready(function(){
     jQuery("#btn_completed").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_completed_text').val();
         if(isEmpty(pendingStr)) {
-            console.log('Is empty');
             toastr.error('Please, enter a SMS content for completed status!', 'Error!');
             return false;
         }
@@ -83,7 +77,6 @@ jQuery(document).ready(function(){
     jQuery("#btn_refunded").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_refunded_text').val();
         if(isEmpty(pendingStr)) {
-            console.log('Is empty');
             toastr.error('Please, enter a SMS content for refunded status!', 'Error!');
             return false;
         }
@@ -95,7 +88,6 @@ jQuery(document).ready(function(){
     jQuery("#btn_reminder").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_reminder_text').val();
         if(isEmpty(pendingStr)) {
-            console.log('Is empty');
             toastr.error('Please, enter a SMS content for Abandoned cart!', 'Error!');
             return false;
         }
@@ -138,13 +130,17 @@ function smsCalculation(str, isStandard, web2smsPluginUrl) {
     }
    
     var data = {
-        'action': 'web2sms_sms_content_calculation',
+        'action': 'web2smsSmsContentCalculation',
         'str': str
     };
     // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
     jQuery.post(ajaxurl, data, function(response) {
-        tb_show("Mobile view", "../"+web2smsPluginUrl+"src/devicesViewCellPhone.php?TB_iframe=true&width=400&height=770");
+        openPopupWindow(web2smsPluginUrl+'src/devicesViewCellPhone.php', 'Mobile view', 420, 780, response);
     });
+
+    
+
+    
 
     var smsLengthNote = "";
     if(isStandard) {
@@ -153,9 +149,17 @@ function smsCalculation(str, isStandard, web2smsPluginUrl) {
         smsLengthNote = "(Max 70 character per SMS)";
     }
 
-    toastr.success('<b>SMS length</b>: ~'+ str.length + '<br><b>Standard Text</b> : ' + isStandard + '<br><b>SMS nr</b> : ~' + smsNr + '<br>'+ smsLengthNote +'</br>');
-    
+    toastr.success('<b>SMS length</b>: ~'+ str.length + '<br><b>Standard Text</b> : ' + isStandard + '<br><b>SMS nr</b> : ~' + smsNr + '<br>'+ smsLengthNote +'</br>');    
 }
+function openPopupWindow(url, title, width, height, str) {
+    var left = (window.innerWidth - width) / 2;
+    var top = (window.innerHeight - height) / 2;
+    var options = 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left;
+    mobilView = window.open(url, '_blank', options);
+    mobilView.onload = function(){
+        mobilView.document.getElementById('smsContentEx').innerHTML = str;
+    }
+  }
 
 function isStandardTxt(str) {
     for (var i = 0; i < str.length; i++) {
@@ -180,5 +184,5 @@ function isEmpty(val){
 }
 
 function web2smsDocumention(web2smsPluginUrl) {
-    tb_show("Documention", "../"+web2smsPluginUrl+"src/web2smsDocumention.php?TB_iframe=true&width=700&height=770");
+    openPopupWindow(web2smsPluginUrl+'src/web2smsDocumention.php', 'Web2sms Document', 720, 780);
 }

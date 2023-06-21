@@ -1,8 +1,8 @@
 <?php
     /**
-     * 
-     * 
+     * Create a table for abandoned carts.
      */
+
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
     $web2sms_table_name = $wpdb->prefix . "web2sms_abandoned_cart"; 

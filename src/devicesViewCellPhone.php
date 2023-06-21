@@ -1,4 +1,3 @@
-<?php session_start();?>
 <style>
 /*
 * versions 1.0.0
@@ -62,12 +61,10 @@
   padding: 10px;
 }   
 </style>
+<title>Mobile view</title>
 <div class="smartphone">
   <div class="content">
-    <div class="subcontent">
-      <?php
-      echo ($_SESSION['smsStrContent']);
-      ?>
+    <div class="subcontent" id="smsContentEx">
     </div>
   </div>
 </div>
