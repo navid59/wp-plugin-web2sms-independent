@@ -463,7 +463,7 @@ function web2smsSmsContentCalculation() {
     $strFind = array("%ordId%", "%name%", "%lastname%", "%email%");
     $strReplace = array("1234", "ClientName", "ClientLastname", "client@email.com");
     $strContent = str_replace($strFind, $strReplace, sanitize_text_field($_POST['str']));
-    wp_send_json($strContent);
+    wp_send_json(esc_html($strContent));
 }
 add_action( 'wp_ajax_web2smsSmsContentCalculation', 'web2smsSmsContentCalculation' );
 
