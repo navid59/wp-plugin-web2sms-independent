@@ -424,19 +424,19 @@ function web2smsSendSMS($smsCellPhoneNr, $smsContent){
     $web2sms = new WC_Settings_Web2sms();
     
     // Create object of class SendSMS form web2sms Library
-    $sendSMS = new SendSMS();
-    $sendSMS->accountType = 'prepaid';                                                  // postpaid | prepaid
+    $web2smsSendSMS = new SendSMS();
+    $web2smsSendSMS->accountType = 'prepaid';                                                  // postpaid | prepaid
 
     /**
      * Postpaid account
      */
-    $sendSMS->apiKey     = $web2sms->web2smsGetSettingOption('apikey');
-    $sendSMS->secretKey  = $web2sms->web2smsGetSettingOption('secretkey');
+    $web2smsSendSMS->apiKey     = $web2sms->web2smsGetSettingOption('apikey');
+    $web2smsSendSMS->secretKey  = $web2sms->web2smsGetSettingOption('secretkey');
 
     $smsBody = $smsContent;
     $smsRecipient = sprintf("%s", $smsCellPhoneNr);
 
-    $sendSMS->messages[]  = [
+    $web2smsSendSMS->messages[]  = [
                         'sender'            => null,                                    // who send the SMS             // Optional
                         'recipient'         => $smsRecipient,                           // who receive the SMS          // Mandatory
                         'body'              => $smsBody,                                // The actual text of SMS       // Mandatory
@@ -447,10 +447,9 @@ function web2smsSendSMS($smsCellPhoneNr, $smsContent){
                         'visibleMessage'    => false                                    // false -> show the Org Msg & True is not showing the Org Msg           // Optional
                         ];
 
-    $sendSMS->setRequest();
-    $result = $sendSMS->sendSMS();   
+    $web2smsSendSMS->setRequest();
+    $result = $web2smsSendSMS->sendSMS();   
     return $result[0];
-    
 }
 
 
