@@ -8,6 +8,8 @@ Author URI: https://www.web2sms.ro
 License: GPLv2
 */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 require_once 'wc-web2sms.php';
 require_once 'wc-web2sms_install.php';
 
@@ -19,7 +21,7 @@ function web2smsInit() {
     add_filter('plugin_action_links_'.plugin_basename( __FILE__ ),'web2smsActionLinks');
     function web2smsActionLinks( $links ) {
         $plugin_links = array(
-            '<a href="' . admin_url('admin.php?page=wc-settings&tab=settings_tab_web2sms') . '">' . __( 'Settings', 'netopiapayments' ) . '</a>',
+            '<a href="' . admin_url('admin.php?page=wc-settings&tab=settings_tab_web2sms') . '">' . __( 'Settings', 'web2sms' ) . '</a>',
         );
     return array_merge($plugin_links, $links);
     }

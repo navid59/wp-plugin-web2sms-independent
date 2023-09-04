@@ -2,6 +2,9 @@
 /**
  * Assign Web2sms library to plugin
  */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 require_once 'vendor/autoload.php';
 use Web2sms\Sms\SendSMS;
 
@@ -526,9 +529,11 @@ function web2smsReminder() {
      * Delete tmp Record
      */
     $deleteTime = date("Y-m-d H:i:s", strtotime("-1 month")); // a month ago
-    $wpdb->query('DELETE FROM `'. $wpdb->prefix . 'web2sms_abandoned_cart` WHERE `createdAt` < "'. $deleteTime .'"' );
+    $web2smsAbandonedCartTB = $wpdb->prefix . 'web2sms_abandoned_cart';
+    $wpdb->query(
+        $wpdb->prepare('DELETE FROM `%s` WHERE `createdAt` < "%s"', $web2smsAbandonedCartTB, $deleteTime)
+    );
    
-
     /**
      * Get list of abonded cart to send SMS
      */
