@@ -377,6 +377,7 @@ class WC_Settings_Web2sms {
     }
 }
 
+
 $ntpWeb2sms = new WC_Settings_Web2sms();
 $ntpWeb2sms->web2smsInitialization();
 
@@ -461,11 +462,19 @@ function web2smsSendSMS($smsCellPhoneNr, $smsContent){
  * Based on definated sms content
  */
 function web2smsSmsContentCalculation() {
-    global $wpdb;
-    $strFind = array("%ordId%", "%name%", "%lastname%", "%email%");
-    $strReplace = array("1234", "ClientName", "ClientLastname", "client@email.com");
-    $strContent = str_replace($strFind, $strReplace, sanitize_text_field($_POST['str']));
-    wp_send_json(esc_html($strContent));
+    if (current_user_can('manage_options')) {
+        // User has the 'manage_options' capability, which allows this action
+        global $wpdb;
+        check_admin_referer('web2sms_nonce', 'nonce'); // Verify the nonce
+        $strFind = array("%ordId%", "%name%", "%lastname%", "%email%");
+        $strReplace = array("1234", "ClientName", "ClientLastname", "client@email.com");
+        $strContent = str_replace($strFind, $strReplace, sanitize_text_field($_POST['str']));
+        wp_send_json(esc_html($strContent));
+    } else {
+         // User does not have the required capability, so deny the request
+         wp_send_json_error('You do not have permission to perform this action.');
+    }
+    
 }
 add_action( 'wp_ajax_web2smsSmsContentCalculation', 'web2smsSmsContentCalculation' );
 
@@ -522,16 +531,16 @@ function web2smsReminder() {
     $timeAgo     = $interval_time * 60; // Time base on minutes
     $expireLimit = $timeAgo + ( 48 * 60 ); // 48H plus Interval time set as Expire limit and base on minutes
     
-    $intervalTime = date("Y-m-d H:i:s", strtotime("-$timeAgo minutes"));
-    $expireTime = date("Y-m-d H:i:s", strtotime("-$expireLimit minutes"));
+    $intervalTime = gmdate("Y-m-d H:i:s", strtotime("-$timeAgo minutes"));
+    $expireTime = gmdate("Y-m-d H:i:s", strtotime("-$expireLimit minutes"));
         
     /**
      * Delete tmp Record
      */
-    $deleteTime = date("Y-m-d H:i:s", strtotime("-1 month")); // a month ago
+    $deleteTime = gmdate("Y-m-d H:i:s", strtotime("-1 month")); // a month ago
     $web2smsAbandonedCartTB = $wpdb->prefix . 'web2sms_abandoned_cart';
     $wpdb->query(
-        $wpdb->prepare('DELETE FROM `%s` WHERE `createdAt` < "%s"', $web2smsAbandonedCartTB, $deleteTime)
+        $wpdb->prepare('DELETE FROM %s WHERE createdAt < %s', $web2smsAbandonedCartTB, $deleteTime)
     );
    
     /**
@@ -577,7 +586,7 @@ function web2smsReminder() {
                         $wpdb->prepare(
                             'UPDATE `' . $wpdb->prefix . 'web2sms_abandoned_cart` SET smsRetry = %d , updatedAt = %s WHERE id = %s ',
                             (int) $upgradeNrSMS,
-                            date( 'Y-m-d h:i:s', current_time( 'timestamp' )),
+                            gmdate( 'Y-m-d h:i:s', current_time( 'timestamp' )),
                             $abandonedCart->id                       
                         )
                     );
@@ -662,8 +671,8 @@ function web2smsStoreAbandonedCart() {
                         $cartInfo,
                         $checkoutLink,
                         0,
-                        date( 'Y-m-d h:i:s', current_time( $currentTime )),
-                        date( 'Y-m-d h:i:s', current_time( $currentTime + (2 * 24 * 60 * 60 ) ))                        
+                        gmdate( 'Y-m-d h:i:s', current_time( $currentTime )),
+                        gmdate( 'Y-m-d h:i:s', current_time( $currentTime + (2 * 24 * 60 * 60 ) ))
                     )
                 );
             }
@@ -677,7 +686,7 @@ function web2smsStoreAbandonedCart() {
                     'UPDATE `' . $wpdb->prefix . 'web2sms_abandoned_cart` SET userInfo = %s , cartInfo = %s , updatedAt = %s WHERE userId = %d ',
                     $userInfo,
                     $cartInfo,
-                    date( 'Y-m-d h:i:s', current_time( 'timestamp' )),
+                    gmdate( 'Y-m-d h:i:s', current_time( 'timestamp' )),
                     $userId                       
                 )
             );
@@ -718,8 +727,8 @@ function web2smsStoreAbandonedCart() {
                         $cartInfo,
                         $checkoutLink,
                         0,
-                        date( 'Y-m-d h:i:s', current_time( $currentTime )),
-                        date( 'Y-m-d h:i:s', current_time( $currentTime + (2 * 24 * 60 * 60 ) ))                        
+                        gmdate( 'Y-m-d h:i:s', current_time( $currentTime )),
+                        gmdate( 'Y-m-d h:i:s', current_time( $currentTime + (2 * 24 * 60 * 60 ) ))                        
                     )
                 );
                 $abandoned_cart_id = $wpdb->insert_id;
@@ -734,7 +743,7 @@ function web2smsStoreAbandonedCart() {
                     'UPDATE `' . $wpdb->prefix . 'web2sms_abandoned_cart` SET userId = %d , cartInfo = %s , updatedAt = %s WHERE sessionId = %s ',
                     $userId,
                     $cartInfo,
-                    date( 'Y-m-d h:i:s', current_time( 'timestamp' )),
+                    gmdate( 'Y-m-d h:i:s', current_time( 'timestamp' )),
                     $sessionId                       
                 )
             );
@@ -771,7 +780,7 @@ function web2smsCheckoutValidationCart($checkouArg){
             'UPDATE `' . $wpdb->prefix . 'web2sms_abandoned_cart` SET userInfo = %s , cartStatus = %d , updatedAt = %s WHERE sessionId = %s ',
             $userInfo,
             1,
-            date( 'Y-m-d h:i:s', current_time( 'timestamp' )),
+            gmdate( 'Y-m-d h:i:s', current_time( 'timestamp' )),
             $sessionId                       
         )
     );
@@ -788,7 +797,7 @@ function web2smsCheckoutOrderProcessed($orderId){
         $wpdb->prepare(
             'UPDATE `' . $wpdb->prefix . 'web2sms_abandoned_cart` SET orderId = %d , updatedAt = %s WHERE sessionId = %s ',
             $orderId,
-            date( 'Y-m-d h:i:s', current_time( 'timestamp' )),
+            gmdate( 'Y-m-d h:i:s', current_time( 'timestamp' )),
             $sessionId                       
         )
     );

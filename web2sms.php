@@ -32,9 +32,13 @@ add_action('admin_enqueue_scripts', 'web2smsInit', 0);
  * Define Css & JavaScript for plugin
 */
 function web2smsEnqueueScripts() {
+    $nonce = wp_create_nonce('web2sms_nonce'); // Generate a unique nonce
     wp_enqueue_script('web2sms-toastr', plugin_dir_url(__FILE__) . 'js/toastr.min.js',array(), '2.1.3' ,true);
     wp_enqueue_script('web2sms-script', plugins_url('js/web2sms.js', __FILE__), array(), '1.0.1', true );
-    wp_localize_script('web2sms-script', 'web2sms_data', array('plugin_url' => web2smsGetAbsoulutFilePath()));
+    wp_localize_script('web2sms-script', 'web2sms_data', array(
+        'plugin_url' => web2smsGetAbsoulutFilePath(),
+        'nonce' => $nonce
+    ));
     wp_enqueue_style('web2sms-css', plugin_dir_url(__FILE__) . 'css/web2sms.css',array(),'1.0.0');
     wp_enqueue_style('web2sms-toastr-css', plugin_dir_url(__FILE__) . 'css/toastr.min.css',array(), '2.1.3');
 }

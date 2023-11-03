@@ -7,6 +7,7 @@ jQuery(document).ready(function(){
      * get plugin dir from PHP and use it in JS
      */
      var web2smsPluginUrl = web2sms_data.plugin_url;
+     var nonce = web2sms_data.nonce; // The nonce
         
     jQuery("#btn_pending").click(function(){
         pendingStr = jQuery('#wc_settings_web2sms_pending_text').val();
@@ -16,7 +17,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl, nonce);
     });
 
     jQuery("#btn_onhold").click(function(){
@@ -27,7 +28,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl, nonce);
     });
     
     jQuery("#btn_failed").click(function(){
@@ -38,7 +39,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl, nonce);
     });
     
     jQuery("#btn_processing").click(function(){
@@ -49,7 +50,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl, nonce);
     });
     
     jQuery("#btn_cancelled").click(function(){
@@ -60,7 +61,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl, nonce);
     });
     
     jQuery("#btn_completed").click(function(){
@@ -71,7 +72,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl, nonce);
     });
     
     jQuery("#btn_refunded").click(function(){
@@ -82,7 +83,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl, nonce);
     });
     
     jQuery("#btn_reminder").click(function(){
@@ -93,7 +94,7 @@ jQuery(document).ready(function(){
         }
         
         isStandard = isStandardTxt(pendingStr);
-        smsCalculation(pendingStr, isStandard, web2smsPluginUrl);
+        smsCalculation(pendingStr, isStandard, web2smsPluginUrl, nonce);
     });
 
     jQuery("#show_documention").click(function(){
@@ -104,7 +105,7 @@ jQuery(document).ready(function(){
 /**
  * Calculate Nr of SMS
  */
-function smsCalculation(str, isStandard, web2smsPluginUrl) {
+function smsCalculation(str, isStandard, web2smsPluginUrl, nonce) {
     var maxSizeStandard          = 160; // Max Character in standard            | (140*8)/7
     var maxSizeNoneStandard      = 70;  // Max Character in none standard       | (140*8)/16
     var maxSpilitSizeStandard    = 153; // Max Character in split Standard      | ((140-6)*8)/7
@@ -131,16 +132,13 @@ function smsCalculation(str, isStandard, web2smsPluginUrl) {
    
     var data = {
         'action': 'web2smsSmsContentCalculation',
+        'nonce': web2sms_data.nonce,
         'str': str
     };
     // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
     jQuery.post(ajaxurl, data, function(response) {
-        openPopupWindow(web2smsPluginUrl+'src/devicesViewCellPhone.php', 'Mobile view', 420, 780, response);
+        openPopupWindow(web2smsPluginUrl+'src/devicesViewCellPhone.html', 'Mobile view', 420, 780, response);
     });
-
-    
-
-    
 
     var smsLengthNote = "";
     if(isStandard) {
@@ -151,6 +149,7 @@ function smsCalculation(str, isStandard, web2smsPluginUrl) {
 
     toastr.success('<b>SMS length</b>: ~'+ str.length + '<br><b>Standard Text</b> : ' + isStandard + '<br><b>SMS nr</b> : ~' + smsNr + '<br>'+ smsLengthNote +'</br>');    
 }
+
 function openPopupWindow(url, title, width, height, str) {
     var left = (window.innerWidth - width) / 2;
     var top = (window.innerHeight - height) / 2;
@@ -184,5 +183,5 @@ function isEmpty(val){
 }
 
 function web2smsDocumention(web2smsPluginUrl) {
-    openPopupWindow(web2smsPluginUrl+'src/web2smsDocumention.php', 'Web2sms Document', 720, 780);
+    openPopupWindow(web2smsPluginUrl+'src/web2smsDocumention.html', 'Web2sms Document', 720, 780);
 }

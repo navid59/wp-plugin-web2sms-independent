@@ -46,7 +46,6 @@ class Validate extends Web2sms{
     public function dataValidate ($scheduleDate) {
         if(!is_null($scheduleDate)) {
             switch ($scheduleDate) {
-                // case validateDate($scheduleDate, 'Y-m-d\TH:i:sP'):
                 case validateDate($scheduleDate, 'Y-m-d\TH:i:s') :
                 case validateDate($scheduleDate, 'Y-m-d H:i:s')  :
                     break;
