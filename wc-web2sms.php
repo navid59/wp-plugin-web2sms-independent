@@ -642,10 +642,11 @@ function web2smsStoreAbandonedCart() {
         $userId   = get_current_user_id();
         $userMeta = get_user_meta( $userId, '', false );
         $userInfo['nickname'] = $userMeta['nickname'][0];
-        $userInfo['billing_first_name'] = $userMeta['billing_first_name'][0];
-        $userInfo['billing_last_name'] = $userMeta['billing_last_name'][0];
-        $userInfo['billing_email'] = $userMeta['billing_email'][0];
-        $userInfo['billing_phone'] = $userMeta['billing_phone'][0];
+        $userInfo['billing_first_name'] = $userMeta['billing_first_name'][0] ?? '';  // no_billing_first_name
+        $userInfo['billing_last_name'] = $userMeta['billing_last_name'][0] ?? '';    // no_billing_last_name
+        $userInfo['billing_email'] = $userMeta['billing_email'][0] ?? '';            // no_billing_email
+        $userInfo['billing_phone'] = $userMeta['billing_phone'][0] ?? '';            // no_billing_phone
+
         $userInfo = wp_json_encode($userInfo);
 
         /**
