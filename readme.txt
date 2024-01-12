@@ -2,8 +2,8 @@
 Contributors: NETOPIA
 Tags: WEB2SMS, NETOPIA
 Requires at least: 6.0
-Tested up to: 6.3
-Stable tag: 1.0.0
+Tested up to: 6.4
+Stable tag: 1.0.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
@@ -12,25 +12,25 @@ Send SMS via web2sms.ro on order status change & abandoned carts.
 
 == Description ==
 
-The Web2SMS plugin make possibility to send sms to your clients for online merchants who using WooCommerce plugin.
-Web2SMS plugin extends your online shop by sending SMS to your clients for tracking the orders when the status of an order is changed.
+The Web2SMS plugin makes it possible to use the power of direct messaging through SMS from your website.
 
-The WEB2SMS plugin using Web2sms platform (https://www.web2sms.ro) as an external services.
-To make plugin works, you need a valid account from "https://www.web2sms.ro".
-The plugin use the Web2sms API, in order to send SMS.
+Web2sms plugin is designed to act as an extension of your online shop and communicate with your clients whenever the status of an order is changed.
 
-The web2sms platform was created by NETOPIA and was specially designed to support Romanian companies to be closer to their customers.
-By using the WEB2SMS plugin you also will be closer to your customers as well.
+The web2sms plugin uses the platform made available by <a href="https://www.web2sms.ro" target="_blank">https://www.web2sms.ro</a> as an external service. In order to use this plugin you need a valid account and credits that can be purchased only on <a href="https://www.web2sms.ro" target="_blank">https://www.web2sms.ro</a>.
+
+The plugin can be used just with an API provided by web2sms and it can be found on <a href="https://www.web2sms.ro" target="_blank">https://www.web2sms.ro</a>
+
+Web2sms is the main player in the direct marketing messaging through SMS in Romania. Having over 20 years of experience, the team behind web2sms constantly improves the services provided, so that our clients can have the best experience using the platform. The pricing is created so that any company, no matter its size, can use our services and be closer to their clients. You can find multiple packages that are already available on <a href="https://www.web2sms.ro/oferta" target="_blank">https://www.web2sms.ro/oferta</a>.
 
 = Features: =
 
 * **100% FREE TO USE** (GPLv2 or later license).
 * Integrates SMS service with your online shop (WordPress + WooCommerce).
-* Customize/Personalize the SMS content.
+* Fully customize the SMS content, including expressions like: order number, buyer last & first name and others (see documentation for more information)
 * Possibility to add an expression to your SMS content.
     - like : Order number,Buyer name,... (for more information see the documention )
-* Sending SMS are flexible. Can be **Enable** or **Disable** for any order status.
-* Calculate number of sms based on your custom content
+* Sending SMS are flexible. **Enable** or **Disable** the plugin for any order status with just a few clicks.
+* Count the number of credits you will use based on the preview made available directly in the plugin.
 * SMS preview
 
 == Installation ==
